@@ -37,7 +37,7 @@ class Google{
 
 	public function getCurrentUser($callback){
 		if($this->authorize($callback)){
-			return $this->get('userinfo')
+			return $this->get('userinfo');
 		}else{
 			return false;
 		}
@@ -76,9 +76,9 @@ class Google{
 				'redirect_uri' => $redirect_uri,
 				'grant_type' => 'authorization_code'
 			));
-			if(isset($accessToken->access_token)
+			if(isset($accessToken->access_token)){
 				$this->accessToken = $accessToken->access_token;
-			else{
+			}else{
 				$this->accessToken = false;
 				$this->error = $accessToken->error;
 			}
