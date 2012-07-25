@@ -13,8 +13,6 @@ if(isset($_REQUEST['code'])){ // Then we are in stage two
 	/**
 	 * Output:
 
-	 	string 'Your auth key here' (length=18)
-
 		object(stdClass)[54]
 		  public 'id' => string '669' (length=21)
 		  public 'email' => string 'hell@gmail.com' (length=21)
