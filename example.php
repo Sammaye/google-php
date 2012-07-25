@@ -4,8 +4,11 @@ require_once 'Google.php';
 $google = new Google('client_id', 'client_secret');
 
 if(isset($_REQUEST['code'])){ // Then we are in stage two
-	var_dump($google->getAccessToken('http://x.co.uk/example.php'));
-	var_dump($google->get('userinfo'));
+	if($google->authorize('http://x.co.uk/example.php')){
+		var_dump($google->get('userinfo'));
+	}else{
+		echo "something went wrong";
+	}
 
 	/**
 	 * Output:

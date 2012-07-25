@@ -7,6 +7,8 @@ class Google{
 
 	public $accessToken;
 
+	public $error;
+
   	public static $CURL_OPTS = array(
     	CURLOPT_CONNECTTIMEOUT => 10,
     	CURLOPT_RETURNTRANSFER => true,
@@ -22,6 +24,22 @@ class Google{
 	public function __construct($client_id, $client_secret){
 		$this->client_id = $client_id;
 		$this->client_secret = $client_secret;
+	}
+
+	public function authorize($callback){
+		if($this->getAccessToken($callback)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function getCurrentUser($callback){
+		if($this->authorize($callback)){
+			return $this->get('userinfo')
+		}else{
+			return false;
+		}
 	}
 
 	public function getLoginURL($callback, $scopes = array(), $response_type = 'code', $approval_prompt = 'auto', $access_type = 'offline'){
@@ -44,6 +62,10 @@ class Google{
 		return self::$DOMAIN_MAP['auth'].'?'.implode('&amp;', $url_fragments);
 	}
 
+	public function setAccessToken($accessToken){
+		$this->accessToken = $accessToken;
+	}
+
 	public function getAccessToken($redirect_uri = null){
 		if(empty($this->accessToken)){
 			$accessToken = $this->post(self::$DOMAIN_MAP['token'], array(
@@ -53,7 +75,12 @@ class Google{
 				'redirect_uri' => $redirect_uri,
 				'grant_type' => 'authorization_code'
 			));
-			$this->accessToken = $accessToken->access_token;
+			if(isset($accessToken->access_token)
+				$this->accessToken = $accessToken->access_token;
+			else{
+				$this->accessToken = false;
+				$this->error = $accessToken->error;
+			}
 		}
 		return $this->accessToken;
 	}
@@ -124,4 +151,7 @@ class Google{
 		return isset($API_URIS[$alias]) ? $API_URIS[$alias] : $alias;
 	}
 
+	function getLastError(){
+		return $this->error;
+	}
 }
