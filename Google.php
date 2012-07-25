@@ -5,6 +5,7 @@ class Google{
 	public $client_id;
 	public $client_secret;
 
+	public $refreshToken;
 	public $accessToken;
 
 	public $error;
